@@ -22,7 +22,7 @@ services:
     image: ghcr.io/ggml-org/llama.cpp:server-vulkan
     container_name: llama-vulkan-fim
     ports:
-      - "8445:8081" # Maps host port 8081 to container port 8080
+      - "8445:8081"
     volumes:
       - ./models:/models
     devices:
