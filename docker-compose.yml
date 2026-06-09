@@ -1,0 +1,51 @@
+services:
+  llama-vulkan:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: llama-vulkan-primary
+    ports:
+      - "8444:8080"
+    volumes:
+      - ./models:/models
+    devices:
+      - /dev/dri:/dev/dri
+    command: >
+      -m /models/${PRIMARY_MODEL}
+      --host 0.0.0.0
+      --port 8080
+      -ngl 99
+      --ctx-size 32768
+      -np 1
+      --flash-attn "on"
+  llama-vulkan-fim:
+    image: ghcr.io/ggml-org/llama.cpp:server-vulkan
+    container_name: llama-vulkan-fim
+    ports:
+      - "8445:8081" # Maps host port 8081 to container port 8080
+    volumes:
+      - ./models:/models
+    devices:
+      - /dev/dri:/dev/dri
+    command: -m /models/${FIM_MODEL} 
+             --host 0.0.0.0
+             --port 8081
+             -ngl 99 
+             --ctx-size 4096
+  llama-vulkan-embed:
+    image: ghcr.io/ggml-org/llama.cpp:server-vulkan
+    container_name: llama-vulkan-embed
+    restart: unless-stopped
+    devices:
+      - /dev/dri:/dev/dri
+    volumes:
+      - ./models:/models
+    ports:
+      - "8446:8082"
+    command: >
+      -m /models/${EMBED_MODEL}
+      --host 0.0.0.0 
+      --port 8082 
+      -ngl 99 
+      --embedding 
+      --ctx-size 8192
