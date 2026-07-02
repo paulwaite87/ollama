@@ -1,5 +1,6 @@
 services:
   llama-vulkan:
+    image: ghcr.io/ggml-org/llama.cpp:server-vulkan
     build:
       context: .
       dockerfile: Dockerfile
@@ -14,7 +15,7 @@ services:
       -m /models/${PRIMARY_MODEL}
       --host 0.0.0.0
       --port 8080
-      -ngl 99
+      -ngl 32
       --ctx-size 32768
       -np 1
       --flash-attn "on"
@@ -30,7 +31,7 @@ services:
     command: -m /models/${FIM_MODEL} 
              --host 0.0.0.0
              --port 8081
-             -ngl 99 
+             -ngl 32
              --ctx-size 4096
   llama-vulkan-embed:
     image: ghcr.io/ggml-org/llama.cpp:server-vulkan
@@ -46,6 +47,6 @@ services:
       -m /models/${EMBED_MODEL}
       --host 0.0.0.0 
       --port 8082 
-      -ngl 99 
+      -ngl 32 
       --embedding 
-      --ctx-size 8192
+      --ctx-size 2048

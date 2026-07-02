@@ -5,9 +5,9 @@ EMBED_CONTAINER=llama-vulkan-embed
 MODELS_DIR=./models
 COMPOSE_FILE=docker-compose.yml
 HF_SITE=https://huggingface.co
-export HF_TOKEN=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
+export HF_TOKEN=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
 
-.PHONY: save_env swap_primary swap_fim swap_embed start stop restart logs ps run list shell monitor install uninstall help
+.PHONY: build rebuild save_env swap_primary swap_fim swap_embed start stop restart logs ps run list shell monitor install uninstall help
 
 ## swap_primary: Swap the primary chat model (e.g., make swap_primary model=Llama-3.gguf)
 swap_primary:
@@ -89,6 +89,14 @@ stop:
 ## restart: Restart all containers
 restart:
 	docker compose restart
+
+## build: Build images if changed
+build: stop
+	docker compose build
+
+## rebuild: Rebuild all images from scratch
+rebuild: stop
+	docker compose build --no-cache
 
 ## logs: View live container boot and inference logs for both models
 logs:
