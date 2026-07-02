@@ -5,7 +5,9 @@ EMBED_CONTAINER=llama-vulkan-embed
 MODELS_DIR=./models
 COMPOSE_FILE=docker-compose.yml
 HF_SITE=https://huggingface.co
-export HF_TOKEN=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
+
+include .env
+export
 
 .PHONY: build rebuild save_env swap_primary swap_fim swap_embed start stop restart logs ps run list shell monitor install uninstall help
 
@@ -131,9 +133,9 @@ ifndef model
 endif
 	@echo "Downloading model to shared volume..."
 ifdef include
-	hf download ${model} --local-dir=${MODELS_DIR} --include="*${include}*" --token=${HF_TOKEN}
+	hf download ${model} --local-dir=${MODELS_DIR} --include="*${include}*" --token=$(HF_TOKEN)
 else
-	hf download ${model} --local-dir=${MODELS_DIR} --token=${HF_TOKEN}
+	hf download ${model} --local-dir=${MODELS_DIR} --token=$(HF_TOKEN)
 endif
 	@echo "Download complete!"
 
